@@ -1,0 +1,47 @@
+/**
+ * OOCSS & SMACSS
+ */
+
+/* Base */
+body { padding-top: 50px; }
+
+/* Utilities */
+.mr-xxsmall { margin-right: 5px; }
+.mr-xsmall { margin-right: 10px; }
+.mr-small { margin-right: 15px; }
+.mr-medium { margin-right: 20px; }
+.mr-large { margin-right: 30px; }
+.mr-xlarge { margin-right: 45px; }
+.mr-xxlarge { margin-right: 60px; }
+
+.mb-xxsmall { margin-bottom: 5px; }
+.mb-xsmall { margin-bottom: 10px; }
+.mb-small { margin-bottom: 15px; }
+.mb-medium { margin-bottom: 20px; }
+.mb-large { margin-bottom: 30px; }
+.mb-xlarge { margin-bottom: 45px; }
+.mb-xxlarge { margin-bottom: 60px; }
+
+.ml-xxsmall { margin-left: 5px; }
+.ml-xsmall { margin-left: 10px; }
+.ml-small { margin-left: 15px; }
+.ml-medium { margin-left: 20px; }
+.ml-large { margin-left: 30px; }
+.ml-xlarge { margin-left: 45px; }
+.ml-xxlarge { margin-left: 60px; }
+
+.inline-block { display: inline-block; }
+
+/* Layout */
+.site-main { padding: 40px 15px; }
+
+/* Modules */
+.page-header { margin-top: 0; border: 0; }
+
+/* Themes */
+.font-bold { font-weight: 700; }
+
+.bt-lightgray { border-top: 1px solid #eee; }
+.br-lightgray { border-right: 1px solid #eee; }
+.bb-lightgray { border-bottom: 1px solid #eee; }
+.bl-lightgray { border-left: 1px solid #eee; }
