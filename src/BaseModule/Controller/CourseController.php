@@ -1,6 +1,7 @@
 <?php
 namespace CoursePlanner\BaseModule\Controller;
 
+use CoursePlanner\BaseModule\Model\Curriculum;
 use Octopix\Selene\Mvc\Controller\Controller;
 use Octopix\Selene\Mvc\View\View;
 use CoursePlanner\BaseModule\Model\Course;
@@ -50,7 +51,8 @@ class CourseController extends Controller {
 	public function newAction()
 	{
 		$this->render( View::make( 'courses/form' , array(
-			'title'   => 'Ajouter un nouveau cours'
+			'title'   => 'Ajouter un nouveau cours',
+			'curriculums' => Curriculum::all()
 		) ) );
 	}
 
@@ -78,7 +80,8 @@ class CourseController extends Controller {
 		$course = Course::find( $id );
 		$this->render( View::make( 'courses/form' , array(
 			'title'  => sprintf( 'Modifier "%s"', $course->name ),
-			'course' => $course
+			'course' => $course,
+			'curriculums' => Curriculum::all()
 		) ) );
 	}
 
@@ -89,8 +92,9 @@ class CourseController extends Controller {
 	public function saveAction()
 	{
 		$saved = false;
-		$message = 'Une erreur est survenue. Votre cours n\'a pas été enregistré.';
+		$message = 'Une erreur est survenue. Votre cours n\'a pas &eacute;t&eacute; enregistr&eacute;.';
 
+		// Persist submitted course.
 		$course = new Course();
 		$course->setId( (int) $this->getRequest()->post('id') );
 		$course->name = $this->getRequest()->post('name');
@@ -100,8 +104,17 @@ class CourseController extends Controller {
 		$course->reference_document = $this->getRequest()->post('reference_document');
 		$saved = $course->save();
 
+		// Persist relations with curriculums.
+		$ids = $this->getRequest()->post('curriculum_id');
+		if( !empty( $ids ) ) {
+			exit( 'course_id='.$course->getId() );
+			foreach( $ids as $curriculum_id ) {
+
+			}
+		}
+
 		if ( $saved ) {
-			$message = 'Votre cours a correctement été enregistré.';
+			$message = 'Votre cours a correctement &eacute;t&eacute; enregistr&eacute;.';
 		}
 		$this->render( View::make( 'courses/show' , array(
 			'status'  => $saved,

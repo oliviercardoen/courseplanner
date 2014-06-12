@@ -23,18 +23,29 @@
 	</div>
 	<div class="form-group">
 		<label for="end_date" class="col-sm-2 control-label">Date de fin</label>
-		<div class="col-md-4">
+		<div class="col-sm-4">
 			<input type="text" class="form-control" id="end_date" name="end_date" value="<?php if ( isset( $course->end_date ) ): echo htmlspecialchars( $course->end_date ); endif; ?>" placeholder="AAAA-MM-JJ...">
 		</div>
-		<div class="col-md-6"></div>
+		<div class="col-sm-6"></div>
 	</div>
 	<div class="form-group">
 		<label for="reference_document" class="col-sm-2 control-label">Dossier pédagogique</label>
-		<div class="col-md-4">
+		<div class="col-sm-4">
 			<input type="text" class="form-control" id="reference_document" name="reference_document" value="<?php if ( isset( $course->reference_document ) ): echo htmlspecialchars( $course->reference_document ); endif; ?>" placeholder="http://www.mondossier.cfweb.be...">
 		</div>
-		<div class="col-md-6"></div>
+		<div class="col-sm-6"></div>
 	</div>
+	<?php if ( !empty ( $curriculums ) ): ?>
+		<div class="form-group">
+			<label for="curriculum_id" class="col-sm-2 control-label">Formations</label>
+			<div class="col-sm-4 pt-xsmall">
+				<?php foreach( $curriculums as $curriculum ): ?>
+					<p><input type="checkbox" name="curriculum_id[]" value="<?php echo $curriculum->getId(); ?>"> <?php echo $curriculum->name; ?></p>
+				<?php endforeach; ?>
+			</div>
+			<div class="col-sm-6"></div>
+		</div><!-- .checkbox -->
+	<?php endif; ?>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-md-10">
 			<?php if ( isset( $course ) ): ?>
