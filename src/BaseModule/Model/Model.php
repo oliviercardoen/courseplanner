@@ -74,13 +74,18 @@ abstract class Model implements ModelInterface {
 		throw new \Exception('Unable to delete the requested property.');
 	}
 
+	protected static function connect()
+	{
+		return DatabaseProviderMySQL::connect();
+	}
+
 	public static function query($sql, $start = -1, $limit = -1)
 	{
 		if ($start != -1 || $limit != -1)
 		{
 			$sql .= ' LIMIT '.(int) $limit.' OFFSET '.(int) $start;
 		}
-		$pdo = DatabaseProviderMySQL::connect();
+		$pdo = self::connect();
 		$query = $pdo->query($sql);
 		$query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_called_class());
 		return $query;
@@ -88,7 +93,7 @@ abstract class Model implements ModelInterface {
 
 	public static function prepare( $sql )
 	{
-		$pdo = DatabaseProviderMySQL::connect();
+		$pdo = self::connect();
 		$query = $pdo->prepare( $sql );
 		return $query;
 	}
