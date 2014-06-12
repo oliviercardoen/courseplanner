@@ -1,6 +1,9 @@
 <?php
 namespace CoursePlanner\BaseModule\Model;
 
+use Octopix\Selene\Database\Provider\MySQL\DatabaseProviderMySQL;
+
+
 class Course extends Model {
 
 	public static function all( $table = '`course`' )
@@ -10,7 +13,9 @@ class Course extends Model {
 
 	public function save()
 	{
-		if ( isset( $this->id ) && 0 < $this->id ) {
+		$saved = false;
+
+		if ( !$this->isNew() ) {
 			$sql = 'UPDATE `course` SET  `name` = :name, `start_date` = :start_date , `end_date` = :end_date, `reference_document` = :reference_document, `code` = :code WHERE  `course`.`id` = :id;';
 		} else {
 			$sql = 'INSERT INTO `course` ( `id`, `name`, `start_date`, `end_date`, `reference_document`, `code`) VALUES ( :id, :name, :start_date, :end_date, :reference_document, :code );';
@@ -25,7 +30,12 @@ class Course extends Model {
 		$query->bindValue(':end_date', $this->end_date );
 		$query->bindValue(':reference_document', $this->reference_document );
 
-		return (bool) $query->execute();
+		$saved = (bool) $query->execute();
+
+		if( $this->isNew() && $saved ) {
+			$this->id = parent::connect()->lastInsertId();
+		}
+		return $saved;
 	}
 
 	public function delete( $table = '`course`' )
