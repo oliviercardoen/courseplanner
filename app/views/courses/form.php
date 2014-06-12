@@ -40,7 +40,7 @@
 			<label for="curriculum_id" class="col-sm-2 control-label">Formations</label>
 			<div class="col-sm-4 pt-xsmall">
 				<?php foreach( $curriculums as $curriculum ): ?>
-					<p><input type="checkbox" name="curriculum_id[]" value="<?php echo $curriculum->getId(); ?>"> <?php echo $curriculum->name; ?></p>
+					<p><input type="checkbox" name="curriculum_id[]" value="<?php echo $curriculum->id; ?>"> <?php echo $curriculum->name; ?></p>
 				<?php endforeach; ?>
 			</div>
 			<div class="col-sm-6"></div>
@@ -49,7 +49,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-md-10">
 			<?php if ( isset( $course ) ): ?>
-				<input type="hidden" name="id" value="<?php echo $course->getId(); ?>"/>
+				<input type="hidden" name="id" value="<?php echo $course->id; ?>"/>
 			<?php else: ?>
 				<input type="hidden" name="id" value="0"/>
 			<?php endif; ?>

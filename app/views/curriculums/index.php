@@ -17,12 +17,12 @@
 		</tr>
 		<?php foreach( $entities as $entity ): ?>
 			<tr>
-				<td><a href="<?php echo \App\App::url( 'curriculums' ) . '/show/' . $entity->getId(); ?>"><?php echo $entity->name; ?></a></td>
+				<td><a href="<?php echo \App\App::url( 'curriculums' ) . '/show/' . $entity->id; ?>"><?php echo $entity->name; ?></a></td>
 				<td><?php echo $entity->timeslot()->name; ?></td>
 				<td class="text-right">
-					<a class="btn btn-default btn-sm ml-xxsmall" href="<?php echo \App\App::url( 'curriculums' ) . '/edit/' . $entity->getId(); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+					<a class="btn btn-default btn-sm ml-xxsmall" href="<?php echo \App\App::url( 'curriculums' ) . '/edit/' . $entity->id; ?>"><i class="glyphicon glyphicon-pencil"></i></a>
 					<form class="inline-block" action="<?php echo \App\App::url( 'curriculums' ) . '/delete/'; ?>" method="POST">
-						<input type="hidden" name="id" value="<?php echo $entity->getId(); ?>" />
+						<input type="hidden" name="id" value="<?php echo $entity->id; ?>" />
 						<button class="btn btn-danger btn-sm ml-xxsmall" type="submit"><i class="glyphicon glyphicon-trash"></i></button>
 					</form>
 				</td>

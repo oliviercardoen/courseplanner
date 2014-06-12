@@ -14,7 +14,7 @@
 				<option>Sélectionnez</option>
 				<?php if ( !empty( $timeslots ) ): ?>
 					<?php foreach( $timeslots as $timeslot ): ?>
-						<option value="<?php echo $timeslot->getId(); ?>"><?php echo $timeslot->name; ?></option>
+						<option value="<?php echo $timeslot->id; ?>"><?php echo $timeslot->name; ?></option>
 					<?php endforeach; ?>
 				<?php endif; ?>
 			</select>
@@ -24,7 +24,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-md-10">
 			<?php if ( isset( $entity ) ): ?>
-				<input type="hidden" name="id" value="<?php echo $entity->getId(); ?>"/>
+				<input type="hidden" name="id" value="<?php echo $entity->id; ?>"/>
 			<?php else: ?>
 				<input type="hidden" name="id" value="0"/>
 			<?php endif; ?>

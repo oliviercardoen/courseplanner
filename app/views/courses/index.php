@@ -21,14 +21,14 @@
 		<?php foreach( $courses as $course ): ?>
 			<tr>
 				<td><?php echo $course->code; ?></td>
-				<td><a href="<?php echo \App\App::url( 'courses' ) . '/show/' . $course->getId(); ?>"><?php echo $course->name; ?></a></td>
+				<td><a href="<?php echo \App\App::url( 'courses' ) . '/show/' . $course->id; ?>"><?php echo $course->name; ?></a></td>
 				<td><?php echo $course->start_date; ?></td>
 				<td><?php echo $course->end_date; ?></td>
 				<td><a href="<?php echo $course->reference_document; ?>" target="_blank">Dossier pédagogique<i class="glyphicon glyphicon-share-alt ml-xxsmall"></i></a></td>
 				<td class="text-right">
-					<a class="btn btn-default btn-sm ml-xxsmall" href="<?php echo \App\App::url( 'courses' ) . '/edit/' . $course->getId(); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+					<a class="btn btn-default btn-sm ml-xxsmall" href="<?php echo \App\App::url( 'courses' ) . '/edit/' . $course->id; ?>"><i class="glyphicon glyphicon-pencil"></i></a>
 					<form class="inline-block" action="<?php echo \App\App::url( 'courses' ) . '/delete/'; ?>" method="POST">
-						<input type="hidden" name="id" value="<?php echo $course->getId(); ?>" />
+						<input type="hidden" name="id" value="<?php echo $course->id; ?>" />
 						<button class="btn btn-danger btn-sm ml-xxsmall" type="submit"><i class="glyphicon glyphicon-trash"></i></button>
 					</form>
 				</td>
