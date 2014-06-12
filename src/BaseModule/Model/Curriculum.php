@@ -5,9 +5,23 @@ class Curriculum extends Model {
 
 	private $timeslot;
 
+	public function courses()
+	{
+		$sql1 = 'SELECT * FROM `course` WHERE `course`.`id` IN (%s) ORDER BY `course`.`name` ASC';
+		$sql2 = 'SELECT `course_id` FROM `course_curriculum` WHERE `curriculum_id` = %d';
+		$sql = sprintf( $sql1, sprintf( $sql2, $this->id ) );
+		$query = parent::query( $sql, '\CoursePlanner\BaseModule\Model\Course' );
+		$results = $query->fetchAll();
+		$query->closeCursor();
+		return $results;
+	}
+
 	public function timeslot()
 	{
-		return Timeslot::find( $this->timeslot_id );
+		if ( !isset( $this->timeslot ) ) {
+			$this->timeslot = Timeslot::find( $this->timeslot_id );
+		}
+		return $this->timeslot;
 	}
 
 	public static function all( $table = '`curriculum`' )

@@ -15,13 +15,13 @@ class CurriculumController extends Controller {
 	public function deleteAction()
 	{
 		$deleted = false;
-		$message = 'Une erreur est survenue. Votre formation n\'a pas été supprimé.';
+		$message = 'Une erreur est survenue. Votre formation n\'a pas &eacute;t&eacute; supprim&eacute;.';
 
 		$entity  = Curriculum::find( (int) $this->getRequest()->post('id') );
 		$deleted = $entity->delete();
 
 		if ( $deleted ) {
-			$message = 'Votre formation a correctement été supprimé.';
+			$message = 'Votre formation a correctement &eacute;t&eacute; supprim&eacute;.';
 		}
 
 		$this->render( View::make( 'curriculums/index' , array(
@@ -67,7 +67,9 @@ class CurriculumController extends Controller {
 		$entity   = Curriculum::find( $id );
 		$this->render( View::make( 'curriculums/show', array(
 			'title'    => $entity->name,
-			'entity'   => $entity
+			'entity'   => $entity,
+			'timeslot' => $entity->timeslot(),
+			'courses'  => $entity->courses()
 		) ) );
 	}
 
@@ -93,22 +95,28 @@ class CurriculumController extends Controller {
 	public function saveAction()
 	{
 		$saved = false;
-		$message = 'Une erreur est survenue. Votre cours n\'a pas été enregistré.';
+		$message = 'Une erreur est survenue. Votre cours n\'a pas &eacute;t&eacute; enregistr&eacute;.';
 
 		$curriculum = new Curriculum();
-		$curriculum->setId( (int) $this->getRequest()->post('id') );
+		$curriculum->id = (int) $this->getRequest()->post('id');
 		$curriculum->name = $this->getRequest()->post('name');
-		$curriculum->timeslot_id = $this->getRequest()->post('timeslot_id');
-		$saved = $curriculum->save();
+		$curriculum->timeslot_id = (int) $this->getRequest()->post('timeslot_id');
 
-		if ( $saved ) {
-			$message = 'Votre cours a correctement été enregistré.';
+		if ( !empty( $curriculum->timeslot_id ) ) {
+			$saved = $curriculum->save();
+			if ( $saved ) {
+				$message = 'Votre cours a correctement &eacute;t&eacute; enregistr&eacute;.';
+			}
+		} else {
+			$message = 'Une erreur est survenue. Veuillez s&eacute;lectionner une p&eacute;riode.';
 		}
+
 		$this->render( View::make( 'curriculums/show' , array(
 			'status'  => $saved,
 			'message' => $message,
 			'title'   => $curriculum->name,
-			'entity'  => $curriculum
+			'entity'  => $curriculum,
+			'courses' => $curriculum->courses()
 		) ) );
 	}
 
