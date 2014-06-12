@@ -65,8 +65,9 @@ class CourseController extends Controller {
 	{
 		$course = Course::find( $id );
 		$this->render( View::make( 'courses/show', array(
-			'title'  => $course->name,
-			'course' => $course
+			'title'  	  => $course->name,
+			'course' 	  => $course,
+			'curriculums' => $course->curriculums()
 		) ) );
 	}
 
@@ -94,24 +95,15 @@ class CourseController extends Controller {
 		$saved = false;
 		$message = 'Une erreur est survenue. Votre cours n\'a pas &eacute;t&eacute; enregistr&eacute;.';
 
-		// Persist submitted course.
 		$course = new Course();
-		$course->setId( (int) $this->getRequest()->post('id') );
+		$course->id = (int) $this->getRequest()->post('id');
 		$course->name = $this->getRequest()->post('name');
 		$course->code = $this->getRequest()->post('code');
 		$course->start_date = $this->getRequest()->post('start_date');
 		$course->end_date = $this->getRequest()->post('end_date');
 		$course->reference_document = $this->getRequest()->post('reference_document');
+		$course->curriculums = $this->getRequest()->post('curriculum_id');
 		$saved = $course->save();
-
-		// Persist relations with curriculums.
-		$ids = $this->getRequest()->post('curriculum_id');
-		if( !empty( $ids ) ) {
-			exit( 'course_id='.$course->getId() );
-			foreach( $ids as $curriculum_id ) {
-
-			}
-		}
 
 		if ( $saved ) {
 			$message = 'Votre cours a correctement &eacute;t&eacute; enregistr&eacute;.';

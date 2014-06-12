@@ -1,10 +1,9 @@
 <?php
 namespace CoursePlanner\BaseModule\Model;
 
-use Octopix\Selene\Database\Provider\MySQL\DatabaseProviderMySQL;
-
-
 class Course extends Model {
+
+	public $curriculums;
 
 	public static function all( $table = '`course`' )
 	{
@@ -13,8 +12,6 @@ class Course extends Model {
 
 	public function save()
 	{
-		$saved = false;
-
 		if ( !$this->isNew() ) {
 			$sql = 'UPDATE `course` SET  `name` = :name, `start_date` = :start_date , `end_date` = :end_date, `reference_document` = :reference_document, `code` = :code WHERE  `course`.`id` = :id;';
 		} else {
@@ -30,17 +27,41 @@ class Course extends Model {
 		$query->bindValue(':end_date', $this->end_date );
 		$query->bindValue(':reference_document', $this->reference_document );
 
+		// Persist submitted course.
 		$saved = (bool) $query->execute();
 
 		if( $this->isNew() && $saved ) {
 			$this->id = parent::connect()->lastInsertId();
 		}
+
+		// Persist relations with curriculums.
+		if ( !empty( $this->curriculums ) ) {
+			$sql = 'INSERT INTO `course_curriculum` ( `course_id`, `curriculum_id` ) VALUES ( :course_id, :curriculum_id );';
+			$query = parent::prepare( $sql );
+			foreach( $this->curriculums as $curriculum_id ) {
+				$query->bindValue(':course_id', $this->id );
+				$query->bindValue(':curriculum_id', (int) $curriculum_id );
+				$saved = (bool) $query->execute();
+			}
+		}
+
 		return $saved;
 	}
 
 	public function delete( $table = '`course`' )
 	{
 		return parent::delete( $table );
+	}
+
+	public function curriculums()
+	{
+		$sql1 = 'SELECT * FROM `curriculum` WHERE `curriculum`.`id` IN (%s) ORDER BY `curriculum`.`id`';
+		$sql2 = 'SELECT `curriculum_id` FROM `course_curriculum` WHERE `course_id` = %d';
+		$sql = sprintf( $sql1, sprintf( $sql2, $this->id ) );
+		$query = parent::query( $sql, '\CoursePlanner\BaseModule\Model\Curriculum' );
+		$results = $query->fetchAll();
+		$query->closeCursor();
+		return $results;
 	}
 
 }
