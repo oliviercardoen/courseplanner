@@ -18,6 +18,7 @@ Thumbs.db
 .settings/org.eclipse.wst.html.core.prefs
 *.sublime-project
 *.sublime-workspace
+.idea/*
 
 ## Ignore theme files
 
