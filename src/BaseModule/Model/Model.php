@@ -8,12 +8,21 @@ abstract class Model implements ModelInterface {
 
 	protected $id;
 
-	public function __construct(array $data = array())
+	public function __construct( array $data = array() )
 	{
-		if (!empty($data))
-		{
-			$this->hydrate($data);
+		if ( !empty( $data ) ) {
+			$this->hydrate( $data );
 		}
+	}
+
+	public function __get( $key )
+	{
+		return $this->$key;
+	}
+
+	public function __set( $key, $value )
+	{
+		$this->$key = $value;
 	}
 
 	public function isNew()
@@ -21,57 +30,38 @@ abstract class Model implements ModelInterface {
 		return empty($this->id);
 	}
 
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	public function setId($id)
-	{
-		$this->id = (int) $id;
-	}
-
 	public function hydrate(array $data)
 	{
-		foreach ($data as $attribut => $valeur)
-		{
-			$method = 'set'.ucfirst($attribut);
-
-			if (is_callable(array($this, $method)))
-			{
-				$this->$method($valeur);
+		foreach ($data as $key => $val) {
+			$method = 'set'.ucfirst($key);
+			if (is_callable(array($this, $method))) {
+				$this->$method($val);
 			}
 		}
 	}
 
-	public function offsetGet($var)
+	public function offsetGet( $key )
 	{
-		$method = 'get'.ucfirst($attribut);
-
-		if (isset($this->$var) && is_callable(array($this, $method)))
-		{
-			return $this->$method();
+		if ( isset($this->$key) ) {
+			return $this->$key;
 		}
 	}
 
-	public function offsetSet($var, $value)
+	public function offsetSet( $key, $value )
 	{
-		$method = 'set'.ucfirst($var);
-
-		if (isset($this->$var) && is_callable(array($this, $method)))
-		{
-			$this->$method($value);
+		if ( isset( $this->$key ) ) {
+			$this->$key = $value;
 		}
 	}
 
-	public function offsetExists($var)
+	public function offsetExists( $key )
 	{
-		return isset($this->$var) && is_callable(array($this, $var));
+		return isset( $this->$key );
 	}
 
-	public function offsetUnset($var)
+	public function offsetUnset( $key )
 	{
-		throw new \Exception('Unable to delete the requested property.');
+		throw new \Exception( 'Unable to delete the requested property.' );
 	}
 
 	protected static function connect()
@@ -79,7 +69,7 @@ abstract class Model implements ModelInterface {
 		return DatabaseProviderMySQL::connect();
 	}
 
-	public static function query($sql, $start = -1, $limit = -1)
+	public static function query($sql, $class = null, $start = -1, $limit = -1)
 	{
 		if ($start != -1 || $limit != -1)
 		{
@@ -87,7 +77,11 @@ abstract class Model implements ModelInterface {
 		}
 		$pdo = self::connect();
 		$query = $pdo->query($sql);
-		$query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_called_class());
+		if ( isset( $class ) ) {
+			$query->setFetchMode( \PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class );
+		} else {
+			$query->setFetchMode( \PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_called_class() );
+		}
 		return $query;
 	}
 
