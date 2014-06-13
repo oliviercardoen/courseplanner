@@ -1,9 +1,12 @@
 <?php
 namespace CoursePlanner\BaseModule\Model;
 
+use Octopix\Selene\Mvc\Model\Model;
+
 class Course extends Model {
 
-	public $curriculums;
+	protected $curriculum_ids;
+	protected $curriculums;
 
 	public static function all( $table = '`course`' )
 	{
@@ -35,10 +38,10 @@ class Course extends Model {
 		}
 
 		// Persist relations with curriculums.
-		if ( !empty( $this->curriculums ) ) {
+		if ( !empty( $this->curriculum_ids ) ) {
 			$sql = 'INSERT INTO `course_curriculum` ( `course_id`, `curriculum_id` ) VALUES ( :course_id, :curriculum_id );';
 			$query = parent::prepare( $sql );
-			foreach( $this->curriculums as $curriculum_id ) {
+			foreach( $this->curriculum_ids as $curriculum_id ) {
 				$query->bindValue(':course_id', $this->id );
 				$query->bindValue(':curriculum_id', (int) $curriculum_id );
 				$saved = (bool) $query->execute();
@@ -55,13 +58,28 @@ class Course extends Model {
 
 	public function curriculums()
 	{
-		$sql1 = 'SELECT * FROM `curriculum` WHERE `curriculum`.`id` IN (%s) ORDER BY `curriculum`.`id`';
-		$sql2 = 'SELECT `curriculum_id` FROM `course_curriculum` WHERE `course_id` = %d';
-		$sql = sprintf( $sql1, sprintf( $sql2, $this->id ) );
-		$query = parent::query( $sql, '\CoursePlanner\BaseModule\Model\Curriculum' );
-		$results = $query->fetchAll();
-		$query->closeCursor();
-		return $results;
+		if ( !isset( $this->curriculums ) ) {
+			$sql1 = 'SELECT * FROM `curriculum` WHERE `curriculum`.`id` IN (%s) ORDER BY `curriculum`.`id`';
+			$sql2 = 'SELECT `curriculum_id` FROM `course_curriculum` WHERE `course_id` = %d';
+			$sql = sprintf( $sql1, sprintf( $sql2, $this->id ) );
+			$query = parent::query( $sql, '\CoursePlanner\BaseModule\Model\Curriculum' );
+			$this->curriculums = $query->fetchAll();
+			$query->closeCursor();
+		}
+		return $this->curriculums;
+	}
+
+	public function isRelatedCurriculum( $id )
+	{
+		$curriculums = $this->curriculums();
+		if( !empty( $curriculums ) ) {
+			foreach( $curriculums as $curriculum ) {
+				if ( $id === $curriculum->id ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
