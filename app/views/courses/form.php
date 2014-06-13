@@ -40,7 +40,10 @@
 			<label for="curriculum_id" class="col-sm-2 control-label">Formations</label>
 			<div class="col-sm-4 pt-xsmall">
 				<?php foreach( $curriculums as $curriculum ): ?>
-					<p><input type="checkbox" name="curriculum_id[]" value="<?php echo $curriculum->id; ?>"> <?php echo $curriculum->name; ?></p>
+					<?php if ( isset( $course ) ): ?>
+						<?php $checked = ( $course->isRelatedCurriculum( $curriculum->id ) ) ? ' checked="checked"' : ''; ?>
+					<?php endif; ?>
+					<p><input type="checkbox" name="curriculum_id[]" value="<?php echo $curriculum->id; ?>" <?php echo $checked; ?>> <?php echo $curriculum->name; ?></p>
 				<?php endforeach; ?>
 			</div>
 			<div class="col-sm-6"></div>
