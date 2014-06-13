@@ -1,6 +1,8 @@
 <?php
 namespace CoursePlanner\BaseModule\Model;
 
+use Octopix\Selene\Mvc\Model\Model;
+
 class Curriculum extends Model {
 
 	private $timeslot;
