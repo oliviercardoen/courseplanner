@@ -2,6 +2,7 @@
 namespace CoursePlanner\BaseModule\Controller;
 
 use CoursePlanner\BaseModule\Model\Curriculum;
+use Octopix\Selene\Form\Input\Input;
 use Octopix\Selene\Mvc\Controller\Controller;
 use Octopix\Selene\Mvc\View\View;
 use CoursePlanner\BaseModule\Model\Course;
@@ -27,7 +28,7 @@ class CourseController extends Controller {
 			'status'  => $deleted,
 			'message' => $message,
 			'title'   => 'Mes Cours',
-			'courses'  => Course::all()
+			'courses' => Course::all()
 		) ) );
 	}
 
@@ -97,12 +98,12 @@ class CourseController extends Controller {
 
 		$course = new Course();
 		$course->id = (int) $this->getRequest()->post('id');
-		$course->name = $this->getRequest()->post('name');
-		$course->code = $this->getRequest()->post('code');
-		$course->start_date = $this->getRequest()->post('start_date');
-		$course->end_date = $this->getRequest()->post('end_date');
-		$course->reference_document = $this->getRequest()->post('reference_document');
-		$course->curriculums = $this->getRequest()->post('curriculum_id');
+		$course->name = Input::safe( $this->getRequest()->post('name') );
+		$course->code = Input::safe( $this->getRequest()->post('code') );
+		$course->start_date = Input::safe( $this->getRequest()->post('start_date') );
+		$course->end_date = Input::safe( $this->getRequest()->post('end_date') );
+		$course->reference_document = Input::safe( $this->getRequest()->post('reference_document') );
+		$course->curriculum_ids = $this->getRequest()->post('curriculum_id');
 		$saved = $course->save();
 
 		if ( $saved ) {
@@ -112,7 +113,8 @@ class CourseController extends Controller {
 			'status'  => $saved,
 			'message' => $message,
 			'title'   => $course->name,
-			'course'  => $course
+			'course'  => $course,
+			'curriculums' => $course->curriculums()
 		) ) );
 	}
 
