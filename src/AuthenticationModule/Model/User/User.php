@@ -47,16 +47,18 @@ class User extends Model {
 	public function save()
 	{
 		if ( $this->isNew() ) {
-			$sql = 'INSERT INTO `curriculum` ( `id`, `name`, `timeslot_id`) VALUES ( :id, :name, :timeslot_id );';
+			$sql = 'INSERT INTO `user` ( `id`, `name`, `firstname`, `lastname`, `email`, `password`, `user_role_id`, `registration_date` ) VALUES ( :id, :name, :firstname, :lastname, :email, :password, 1, NOW() );';
 		} else {
 			$sql = 'UPDATE `curriculum` SET  `name` = :name, `timeslot_id` = :timeslot_id WHERE  `curriculum`.`id` = :id;';
 		}
-
 		$query = parent::prepare( $sql );
 
-		$query->bindValue(':id', $this->id );
-		$query->bindValue(':name', $this->name );
-		$query->bindValue(':timeslot_id', $this->timeslot_id );
+		$query->bindValue(':id', 		 $this->id );
+		$query->bindValue(':name', 		 $this->name );
+		$query->bindValue(':firstname',  $this->firstname );
+		$query->bindValue(':lastname',   $this->lastname );
+		$query->bindValue(':email',      $this->email );
+		$query->bindValue(':password',   $this->password );
 
 		return (bool) $query->execute();
 	}

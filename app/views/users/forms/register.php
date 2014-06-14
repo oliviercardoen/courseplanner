@@ -4,7 +4,7 @@
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">Prénom</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control" id="first_name" name="first_name" value="<?php if ( isset( $entity->first_name ) ): echo htmlspecialchars( $entity->first_name ); endif; ?>" placeholder="Jean-Philippe...">
+			<input type="text" class="form-control" id="firstname" name="firstname" value="<?php if ( isset( $entity->firstname ) ): echo htmlspecialchars( $entity->firstname ); endif; ?>" placeholder="Jean-Philippe...">
 		</div>
 		<div class="col-sm-6"></div>
 	</div>
@@ -12,7 +12,7 @@
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">Nom</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control" id="last_name" name="last_name" value="<?php if ( isset( $entity->last_name ) ): echo htmlspecialchars( $entity->last_name ); endif; ?>" placeholder="Dupont...">
+			<input type="text" class="form-control" id="lastname" name="lastname" value="<?php if ( isset( $entity->lastname ) ): echo htmlspecialchars( $entity->lastname ); endif; ?>" placeholder="Dupont...">
 		</div>
 		<div class="col-sm-6"></div>
 	</div>

@@ -1,6 +1,7 @@
 <?php
 namespace CoursePlanner\AuthenticationModule\Controller;
 
+use App\App;
 use CoursePlanner\AuthenticationModule\Model\User\User;
 use CoursePlanner\BaseModule\Model\Curriculum;
 use Octopix\Selene\Form\Input\Input;
@@ -87,19 +88,20 @@ class UserController extends Controller {
 		$user = new User();
 		//$user->id = (int) $this->getRequest()->post('id');
 		$user->name = Input::safe( $this->getRequest()->post('email') );
-		$user->first_name = Input::safe( $this->getRequest()->post('first_name') );
-		$user->last_name = Input::safe( $this->getRequest()->post('last_name') );
+		$user->firstname = Input::safe( $this->getRequest()->post('firstname') );
+		$user->lastname = Input::safe( $this->getRequest()->post('lastname') );
 		$user->email = Input::safe( $this->getRequest()->post('email') );
 		$user->password = Input::safe( $this->getRequest()->post('password') );
 		$saved = $user->save();
 
 		if ( $saved ) {
 			$message = 'Votre inscription a correctement &eacute;t&eacute; enregistr&eacute;.';
+			\App\App::user( $user );
 		}
 		$this->render( View::make( 'index' , array(
 			'status'  => $saved,
 			'message' => $message,
-			'title'   => sprintf( 'Bienvenue, %s!', $user->first_name ),
+			'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
 			'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
 		) ) );
 	}

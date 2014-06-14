@@ -16,7 +16,7 @@ use Octopix\Selene\Mvc\View\View;
  */
 class App extends Application {
 
-	public static $user;
+	private static $user;
 
 	public static function user( User $user = null )
 	{
