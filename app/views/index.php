@@ -1,4 +1,4 @@
-<?php include dirname(__FILE__) . '/../alert.php'; ?>
+<?php include dirname(__FILE__) . '/alert.php'; ?>
 
 <?php if ( isset( $title ) ):?>
 	<h1 class="page-header"><?php echo $title; ?></h1>
