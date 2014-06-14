@@ -1,11 +1,11 @@
 <?php
 namespace CoursePlanner\AuthenticationModule\Model\User;
 
-use Octopix\Selene\Application\Component\ApplicationComponent;
+use Octopix\Selene\Mvc\Model\Model;
 
 session_start();
 
-class User extends ApplicationComponent {
+class User extends Model {
 
 	public function getAttribute($attr)
 	{
@@ -36,17 +36,29 @@ class User extends ApplicationComponent {
 
 	public function setAuthenticated($authenticated = true)
 	{
-		if (!is_bool($authenticated))
-		{
-			throw new \InvalidArgumentException('Argument $authenticated must be a boolean.');
-		}
-
-		$_SESSION['auth'] = $authenticated;
+		$_SESSION['auth'] = (bool) $authenticated;
 	}
 
 	public function setFlash($value)
 	{
 		$_SESSION['flash'] = $value;
+	}
+
+	public function save()
+	{
+		if ( $this->isNew() ) {
+			$sql = 'INSERT INTO `curriculum` ( `id`, `name`, `timeslot_id`) VALUES ( :id, :name, :timeslot_id );';
+		} else {
+			$sql = 'UPDATE `curriculum` SET  `name` = :name, `timeslot_id` = :timeslot_id WHERE  `curriculum`.`id` = :id;';
+		}
+
+		$query = parent::prepare( $sql );
+
+		$query->bindValue(':id', $this->id );
+		$query->bindValue(':name', $this->name );
+		$query->bindValue(':timeslot_id', $this->timeslot_id );
+
+		return (bool) $query->execute();
 	}
 
 }
