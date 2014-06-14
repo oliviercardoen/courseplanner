@@ -1,10 +1,12 @@
 <?php
 namespace App;
 
+use CoursePlanner\AuthenticationModule\AuthenticationModule;
+use CoursePlanner\AuthenticationModule\Model\User\User;
+use CoursePlanner\BaseModule\BaseModule;
 use CoursePlanner\BaseModule\Controller\CourseController;
 use CoursePlanner\BaseModule\Controller\CurriculumController;
-use CoursePlanner\BaseModule\Model\Course;
-use CoursePlanner\BaseModule\Model\Curriculum;
+use CoursePlanner\AuthenticationModule\Controller\UserController;
 use Octopix\Selene\Application\Application;
 use Octopix\Selene\Mvc\View\View;
 
@@ -14,7 +16,20 @@ use Octopix\Selene\Mvc\View\View;
  */
 class App extends Application {
 
-	private $controllers;
+	public static $user;
+
+	public static function user( User $user = null )
+	{
+		if ( !empty( $user ) ) {
+			self::$user = $user;
+		}
+		return self::$user;
+	}
+
+	public static function hasUser()
+	{
+		return ( isset( self::$user ) );
+	}
 
 	public static function url( $slug = 'home' )
 	{
@@ -39,7 +54,8 @@ class App extends Application {
 	 */
 	public function registerModules()
 	{
-		// TODO: Implement registerModules() method.
+		$this->modules['auth'] = new AuthenticationModule( $this );
+		$this->modules['base'] = new BaseModule( $this );
 	}
 
 	/**
@@ -47,42 +63,54 @@ class App extends Application {
 	 */
 	public function registerRoutes()
 	{
-		$this->controllers = array();
-		$this->controllers['course'] = new CourseController( $this );
-		$this->controllers['curriculum'] = new CurriculumController( $this );
+		$controllers = array();
+		$controllers['course']     = new CourseController( $this );
+		$controllers['curriculum'] = new CurriculumController( $this );
+		$controllers['user']       = new UserController( $this );
 
 		/* Home route */
 		$this->router->get( '/', function() {
+			$user = self::$user;
+			if( empty( $user ) ) {
+				exit( View::make( 'layout', array(
+					'content' => View::make( 'users/forms/login', array(
+							'title' => 'Veuillez vous connecter'
+						) )
+				) ) );
+			}
 			exit( View::make( 'layout' , array(
-				'title'   => 'Bienvenue!',
+				'title'   => sprintf( 'Bienvenue, %s!', $user->first_name ),
 				'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
 			) ) );
 		});
 
+		/* Registration and login routes */
+		$this->router->post( '/authenticate/',  array( $controllers['user'], 'authenticateAction' ) );
+
+		$this->router->get( '/register/',       array( $controllers['user'], 'indexAction' ) );
+		$this->router->post( '/register/save/', array( $controllers['user'], 'saveAction' ) );
+
+		/* User profile routes */
+		$this->router->get( '/profile/:id/',       array( $controllers['user'], 'showAction' ) );
+		$this->router->get( '/profile/edit/:id/',  array( $controllers['user'], 'editAction' ) );
+		$this->router->post( '/profile/save/',     array( $controllers['user'], 'saveAction' ) );
+		$this->router->post( '/profile/delete/',   array( $controllers['user'], 'deleteAction' ) );
+
 		/* Course routes */
-		$this->router->get( '/courses/',          array( $this->controllers['course'], 'indexAction' ) );
-		$this->router->get( '/courses/new/',      array( $this->controllers['course'], 'newAction' ) );
-		$this->router->get( '/courses/show/:id',  array( $this->controllers['course'], 'showAction' ) );
-		$this->router->get( '/courses/edit/:id',  array( $this->controllers['course'], 'editAction' ) );
-		$this->router->post( '/courses/save/',    array( $this->controllers['course'], 'saveAction' ) );
-		$this->router->post( '/courses/delete/',  array( $this->controllers['course'], 'deleteAction' ) );
+		$this->router->get( '/courses/',           array( $controllers['course'], 'indexAction' ) );
+		$this->router->get( '/courses/new/',       array( $controllers['course'], 'newAction' ) );
+		$this->router->get( '/courses/show/:id/',  array( $controllers['course'], 'showAction' ) );
+		$this->router->get( '/courses/edit/:id/',  array( $controllers['course'], 'editAction' ) );
+		$this->router->post( '/courses/save/',     array( $controllers['course'], 'saveAction' ) );
+		$this->router->post( '/courses/delete/',   array( $controllers['course'], 'deleteAction' ) );
 
 		/* Curriculum routes */
-		$this->router->get( '/curriculums/',          array( $this->controllers['curriculum'], 'indexAction' ) );
-		$this->router->get( '/curriculums/new/',      array( $this->controllers['curriculum'], 'newAction' ) );
-		$this->router->get( '/curriculums/show/:id',  array( $this->controllers['curriculum'], 'showAction' ) );
-		$this->router->get( '/curriculums/edit/:id',  array( $this->controllers['curriculum'], 'editAction' ) );
-		$this->router->post( '/curriculums/save/',    array( $this->controllers['curriculum'], 'saveAction' ) );
-		$this->router->post( '/curriculums/delete/',  array( $this->controllers['curriculum'], 'deleteAction' ) );
-
-		/* Registration and login routes */
-		$this->router->get( '/register/', function() {
-			echo 'Hello Registration form';
-		});
-
-		$this->router->get( '/login/', function() {
-			echo 'Hello Login form';
-		});
+		$this->router->get( '/curriculums/',          array( $controllers['curriculum'], 'indexAction' ) );
+		$this->router->get( '/curriculums/new/',      array( $controllers['curriculum'], 'newAction' ) );
+		$this->router->get( '/curriculums/show/:id/',  array( $controllers['curriculum'], 'showAction' ) );
+		$this->router->get( '/curriculums/edit/:id/',  array( $controllers['curriculum'], 'editAction' ) );
+		$this->router->post( '/curriculums/save/',    array( $controllers['curriculum'], 'saveAction' ) );
+		$this->router->post( '/curriculums/delete/',  array( $controllers['curriculum'], 'deleteAction' ) );
 
 		// Handle not found error from Slim on parse_request.
 		$this->router->notFound( function() {
