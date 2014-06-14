@@ -38,7 +38,7 @@ class Curriculum extends Model {
 
 	public function save()
 	{
-		if ( isset( $this->id ) && 0 < $this->id ) {
+		if ( !$this->isNew() ) {
 			$sql = 'UPDATE `curriculum` SET  `name` = :name, `timeslot_id` = :timeslot_id WHERE  `curriculum`.`id` = :id;';
 		} else {
 			$sql = 'INSERT INTO `curriculum` ( `id`, `name`, `timeslot_id`) VALUES ( :id, :name, :timeslot_id );';
