@@ -1,3 +1,4 @@
+<?php use App\App; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +8,8 @@
 	<title><?php echo ( isset( $title ) ) ? sprintf( '%s | Course Planner', $title) : 'Course Planner'; ?></title>
 
 	<!-- Styles -->
-	<link href="<?php echo \App\App::asset( 'css/vendor/bootstrap.min.css' ); ?>" rel="stylesheet">
-	<link href="<?php echo \App\App::asset( 'css/main.css' ); ?>" rel="stylesheet">
+	<link href="<?php echo App::asset( 'css/vendor/bootstrap.min.css' ); ?>" rel="stylesheet">
+	<link href="<?php echo App::asset( 'css/main.css' ); ?>" rel="stylesheet">
 
 	<!-- IE Scripts -->
 	<!--[if lt IE 9]>
@@ -27,15 +28,24 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?php echo \App\App::url( 'home' ); ?>">Course Planner</a>
+				<a class="navbar-brand" href="<?php echo App::url( 'home' ); ?>">Course Planner</a>
 			</div>
-			<?php if ( \App\App::hasUser() ): ?>
+			<?php if ( App::user()->isAuthenticated() ): ?>
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="<?php echo \App\App::url( 'home' ); ?>">Accueil</a></li>
-						<li><a href="<?php echo \App\App::url( 'courses' ); ?>">Mes Cours</a></li>
-						<li><a href="<?php echo \App\App::url( 'curriculums' ); ?>">Mes Formations</a></li>
+						<li><a href="<?php echo App::url( 'home' ); ?>">Accueil</a></li>
+						<li><a href="<?php echo App::url( 'courses' ); ?>">Mes Cours</a></li>
+						<li><a href="<?php echo App::url( 'curriculums' ); ?>">Mes Formations</a></li>
 					</ul><!-- .nav -->
+					<ul class="nav navbar-nav pull-right hidden-xs">
+						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <?php echo App::user()->fullname(); ?> <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?php  printf( '%1$s/%2$s', App::url( 'profile' ), App::user()->id ); ?>"><i class="glyphicon glyphicon-cog"></i> Mon profil</a></li>
+								<li class="divider"></li>
+								<li><a href="<?php echo App::url( 'logout' ); ?>"><i class="glyphicon glyphicon-off"></i> Se d&eacute;connecter</a></li>
+							</ul>
+						</li>
+					</ul>
 				</div><!--/.nav-collapse -->
 			<?php endif; ?>
 		</div><!-- .container -->
@@ -50,6 +60,6 @@
 	</div><!-- .container -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="<?php echo \App\App::asset( 'js/bootstrap.min.js' ); ?>"></script>
+	<script src="<?php echo App::asset( 'js/bootstrap.min.js' ); ?>"></script>
 </body>
 </html>
