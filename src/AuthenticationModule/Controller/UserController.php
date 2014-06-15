@@ -16,7 +16,41 @@ class UserController extends Controller {
 	 * Usually, controller will instantiate a user entity and affect
 	 * static user in App\App.
 	 */
-	public function authenticateAction() {}
+	public function authenticateAction()
+	{
+		$user = new User();
+		$user->name = Input::safe( $this->getRequest()->post('user_email') );
+		$user->password = sha1( \App\App::salt() . Input::safe( $this->getRequest()->post('user_password') ) );
+		$authenticated = $user->authenticate();
+
+		if ( $authenticated ) {
+			$this->render( View::make( 'index' , array(
+				'status'  => $authenticated,
+				'message' => 'Bravo! Vous &ecirc;tes d&eacute;sormais connect&eacute;(e).',
+				'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
+				'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+			) ) );
+		}
+		$this->render( View::make( 'index' , array(
+			'status'  => $authenticated,
+			'message' => 'Une erreur est survenue. Vos informations de connexion sont incorrectes.',
+			'content' => View::make( 'users/forms/login', array(
+				'title' => 'Veuillez vous connecter'
+			) )
+		) ) );
+	}
+
+	/**
+	 * Handle the logout action.
+	 * Delete the current session and redirect to login form.
+	 */
+	public function logoutAction()
+	{
+		App::user()->logout();
+		$this->render( View::make( 'users/forms/login', array(
+				'title' => 'Veuillez vous connecter'
+		) ) );
+	}
 
 	/**
 	 * Handle the delete action.

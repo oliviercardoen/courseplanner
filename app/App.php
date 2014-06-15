@@ -18,17 +18,21 @@ class App extends Application {
 
 	private static $user;
 
-	public static function user( User $user = null )
+	public static function user()
 	{
-		if ( !empty( $user ) ) {
-			self::$user = $user;
+		if ( !isset( self::$user ) ) {
+			self::$user = new User();
 		}
 		return self::$user;
 	}
 
-	public static function hasUser()
+	public static function salt()
 	{
-		return ( isset( self::$user ) );
+		global $config;
+		if ( isset( $config ) && is_array( $config ) && array_key_exists( 'salt', $config ) ) {
+			return $config['salt'];
+		}
+		return sha1( 'tlas' );
 	}
 
 	public static function url( $slug = 'home' )
@@ -70,8 +74,8 @@ class App extends Application {
 
 		/* Home route */
 		$this->router->get( '/', function() {
-			$user = self::$user;
-			if( empty( $user ) ) {
+			$user = self::user();
+			if( !$user->isAuthenticated() ) {
 				exit( View::make( 'layout', array(
 					'content' => View::make( 'users/forms/login', array(
 							'title' => 'Veuillez vous connecter'
@@ -89,6 +93,8 @@ class App extends Application {
 
 		$this->router->get( '/register/',       array( $controllers['user'], 'indexAction' ) );
 		$this->router->post( '/register/save/', array( $controllers['user'], 'saveAction' ) );
+
+		$this->router->get( '/logout/',         array( $controllers['user'], 'logoutAction' ) );
 
 		/* User profile routes */
 		$this->router->get( '/profile/:id/',       array( $controllers['user'], 'showAction' ) );
