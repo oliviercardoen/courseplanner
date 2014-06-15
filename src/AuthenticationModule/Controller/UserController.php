@@ -13,14 +13,13 @@ class UserController extends Controller {
 
 	/**
 	 * Handle the authenticate action.
-	 * Usually, controller will instantiate a user entity and affect
-	 * static user in App\App.
+	 * Authenticate user from given email and password.
 	 */
 	public function authenticateAction()
 	{
 		$user = new User();
 		$user->name = Input::safe( $this->getRequest()->post('user_email') );
-		$user->password = sha1( \App\App::salt() . Input::safe( $this->getRequest()->post('user_password') ) );
+		$user->password = sha1( App::salt() . Input::safe( $this->getRequest()->post('user_password') ) );
 		$authenticated = $user->authenticate();
 
 		if ( $authenticated ) {
@@ -48,7 +47,7 @@ class UserController extends Controller {
 	{
 		App::user()->logout();
 		$this->render( View::make( 'users/forms/login', array(
-				'title' => 'Veuillez vous connecter'
+			'title' => 'Veuillez vous connecter'
 		) ) );
 	}
 
@@ -113,11 +112,11 @@ class UserController extends Controller {
 
 	/**
 	 * Handle the save action.
-	 * Usually, controller will persist the current entity.
+	 * Persist new user to perform registration.
 	 */
 	public function saveAction()
 	{
-		$message = 'Une erreur est survenue. Votre inscription n\'a pas &eacute;t&eacute; enregistr&eacute;.';
+		$message = 'Votre inscription n\'a pas &eacute;t&eacute; enregistr&eacute; car %s.';
 
 		$user = new User();
 		//$user->id = (int) $this->getRequest()->post('id');
@@ -130,13 +129,17 @@ class UserController extends Controller {
 
 		if ( $saved ) {
 			$message = 'Votre inscription a correctement &eacute;t&eacute; enregistr&eacute;.';
-			\App\App::user( $user );
+			$this->render( View::make( 'index' , array(
+				'status'  => $saved,
+				'message' => $message,
+				'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
+				'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+			) ) );
 		}
-		$this->render( View::make( 'index' , array(
+		$this->render( View::make( 'users/forms/register' , array(
 			'status'  => $saved,
-			'message' => $message,
-			'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
-			'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+			'message' => sprintf( $message, 'votre email existe d&eacute;j&agrave; dans notre base de donn&eacute;es' ),
+			'title'   => 'Nouvelle inscription pour Course Planner'
 		) ) );
 	}
 

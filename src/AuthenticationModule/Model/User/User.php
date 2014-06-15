@@ -12,21 +12,37 @@ class User extends Model {
 
 	public function save()
 	{
-		if ( $this->isNew() ) {
+		if ( $this->isNew() && $this->hasUniqueName() ) {
 			$sql = 'INSERT INTO `user` ( `id`, `name`, `firstname`, `lastname`, `email`, `password`, `user_role_id`, `registration_date` ) VALUES ( :id, :name, :firstname, :lastname, :email, :password, 1, NOW() );';
-		} else {
-			$sql = 'UPDATE `curriculum` SET  `name` = :name, `timeslot_id` = :timeslot_id WHERE  `curriculum`.`id` = :id;';
+
+			$query = parent::prepare( $sql );
+
+			$query->bindValue(':id', $this->id );
+			$query->bindValue(':name', $this->name );
+			$query->bindValue(':firstname', $this->firstname );
+			$query->bindValue(':lastname', $this->lastname );
+			$query->bindValue(':email', $this->email );
+			$query->bindValue(':password', sha1( \App\App::salt() . $this->password ) );
+
+			return (bool) $query->execute();
 		}
-		$query = parent::prepare( $sql );
+		return false;
+	}
 
-		$query->bindValue(':id', $this->id );
-		$query->bindValue(':name', $this->name );
-		$query->bindValue(':firstname', $this->firstname );
-		$query->bindValue(':lastname', $this->lastname );
-		$query->bindValue(':email', $this->email );
-		$query->bindValue(':password', sha1( \App\App::salt() . $this->password ) );
-
-		return (bool) $query->execute();
+	public function hasUniqueName()
+	{
+		if ( isset( $this->name ) ) {
+			$query = self::prepare( 'SELECT * FROM `user` WHERE `name` = :name' );
+			$query->bindValue(':name', $this->name );
+			$query->execute();
+			$query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_called_class());
+			$user = $query->fetch();
+			if ( !empty( $user ) ) {
+				$this->hydrate( $user );
+				return empty( $this->id );
+			}
+		}
+		return true;
 	}
 
 	public function exist()

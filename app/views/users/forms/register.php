@@ -1,3 +1,5 @@
+<?php include dirname(__FILE__) . '/../../alert.php'; ?>
+
 <h1 class="page-header"><?php echo $title; ?></h1>
 <form class="form-horizontal" role="form" action="<?php echo \App\App::url( 'register' ) . '/save/'; ?>" method="POST">
 
