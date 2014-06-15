@@ -132,8 +132,8 @@ class UserController extends Controller {
 			$this->render( View::make( 'index' , array(
 				'status'  => $saved,
 				'message' => $message,
-				'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
-				'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+				'title'   => sprintf( 'Bravo, %s!', $user->firstname ),
+				'content' => sprintf( '<p class="lead">Vous venez de cr&eacute;er un compte sur Course Planner. Vous pouvez d&eacute;sormais vous <a href="%s">connecter</a>.</p>', App::url( 'home' ) )
 			) ) );
 		}
 		$this->render( View::make( 'users/forms/register' , array(

@@ -83,8 +83,10 @@ class App extends Application {
 				) ) );
 			}
 			exit( View::make( 'layout' , array(
-				'title'   => sprintf( 'Bienvenue, %s!', $user->first_name ),
-				'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+				'content' => View::make( 'index', array(
+					'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
+					'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+				) )
 			) ) );
 		});
 

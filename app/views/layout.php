@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><?php echo ( isset( $title ) ) ? sprintf( '%s | Course Planner', $title) : 'Course Planner'; ?></title>
+	<title><?php echo 'Course Planner'; ?></title>
 
 	<!-- Styles -->
 	<link href="<?php echo App::asset( 'css/vendor/bootstrap.min.css' ); ?>" rel="stylesheet">
@@ -39,7 +39,7 @@
 					</ul><!-- .nav -->
 					<ul class="nav navbar-nav pull-right hidden-xs">
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <?php echo App::user()->fullname(); ?> <b class="caret"></b></a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu pull-right">
 								<li><a href="<?php  printf( '%1$s/%2$s', App::url( 'profile' ), App::user()->id ); ?>"><i class="glyphicon glyphicon-cog"></i> Mon profil</a></li>
 								<li class="divider"></li>
 								<li><a href="<?php echo App::url( 'logout' ); ?>"><i class="glyphicon glyphicon-off"></i> Se d&eacute;connecter</a></li>

@@ -7,8 +7,25 @@ session_start();
 
 class User extends Model {
 
-	protected $name;
-	protected $password;
+	private $name;
+	private $password;
+
+	public function __get( $key )
+	{
+		if ( isset( $_SESSION['user_auth'] ) ) {
+			return $_SESSION[sprintf( 'user_%s', $key )];
+		}
+		return $this->$key;
+	}
+
+	public function __set( $key, $value )
+	{
+		$sessionKey = sprintf( 'user_%s', $key );
+		// if ( isset( $_SESSION['user_auth'] ) ) {
+			$_SESSION[$sessionKey] = $value;
+		// }
+		$this->$key = $value;
+	}
 
 	public function save()
 	{
@@ -69,7 +86,7 @@ class User extends Model {
 				//setcookie('name', $this->name);
 				//setcookie('password', $this->password);
 			//}
-			$_SESSION['auth'] = true;
+			$_SESSION['user_auth'] = true;
 			return true;
 		}
 		return false;
@@ -77,16 +94,12 @@ class User extends Model {
 
 	public function isAuthenticated()
 	{
-		return isset($_SESSION['auth']) && $_SESSION['auth'] === true;
+		return isset($_SESSION['user_auth']) && $_SESSION['user_auth'] === true;
 	}
 
 	public function fullname()
 	{
-		$fullname = 'Anonymous';
-		if ( isset( $this->firstname ) && isset( $this->lastname ) ) {
-			$fullname = sprintf( '%1$s, %2$s', $this->lastname, $this->firstname );
-		}
-		return $fullname;
+		return sprintf( '%1$s, %2$s', $this->lastname, $this->firstname );;
 	}
 
 	public function logout()
