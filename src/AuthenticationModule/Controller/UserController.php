@@ -2,7 +2,7 @@
 namespace CoursePlanner\AuthenticationModule\Controller;
 
 use App\App;
-use CoursePlanner\AuthenticationModule\Model\User\User;
+use CoursePlanner\AuthenticationModule\Model\User;
 use CoursePlanner\BaseModule\Model\Curriculum;
 use Octopix\Selene\Form\Input\Input;
 use Octopix\Selene\Mvc\Controller\Controller;

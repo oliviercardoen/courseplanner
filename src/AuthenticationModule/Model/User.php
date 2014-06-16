@@ -1,5 +1,5 @@
 <?php
-namespace CoursePlanner\AuthenticationModule\Model\User;
+namespace CoursePlanner\AuthenticationModule\Model;
 
 use Octopix\Selene\Mvc\Model\Model;
 
