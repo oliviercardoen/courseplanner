@@ -93,7 +93,6 @@ class CourseController extends Controller {
 	 */
 	public function saveAction()
 	{
-		$saved = false;
 		$message = 'Une erreur est survenue. Votre cours n\'a pas &eacute;t&eacute; enregistr&eacute;.';
 
 		$course = new Course();

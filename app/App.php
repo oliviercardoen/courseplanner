@@ -2,11 +2,13 @@
 namespace App;
 
 use CoursePlanner\AuthenticationModule\AuthenticationModule;
-use CoursePlanner\AuthenticationModule\Model\User\User;
+use CoursePlanner\AuthenticationModule\Model\User;
 use CoursePlanner\BaseModule\BaseModule;
 use CoursePlanner\BaseModule\Controller\CourseController;
 use CoursePlanner\BaseModule\Controller\CurriculumController;
 use CoursePlanner\AuthenticationModule\Controller\UserController;
+use CoursePlanner\BaseModule\Controller\SchoolController;
+use CoursePlanner\BaseModule\Controller\SchoolLocationController;
 use Octopix\Selene\Application\Application;
 use Octopix\Selene\Mvc\View\View;
 
@@ -71,6 +73,9 @@ class App extends Application {
 		$controllers['course']     = new CourseController( $this );
 		$controllers['curriculum'] = new CurriculumController( $this );
 		$controllers['user']       = new UserController( $this );
+		$controllers['school']     = new SchoolController( $this );
+
+		$controllers['school_location'] = new SchoolLocationController( $this );
 
 		/* Home route */
 		$this->router->get( '/', function() {
@@ -115,10 +120,25 @@ class App extends Application {
 		/* Curriculum routes */
 		$this->router->get( '/curriculums/',          array( $controllers['curriculum'], 'indexAction' ) );
 		$this->router->get( '/curriculums/new/',      array( $controllers['curriculum'], 'newAction' ) );
-		$this->router->get( '/curriculums/show/:id/',  array( $controllers['curriculum'], 'showAction' ) );
-		$this->router->get( '/curriculums/edit/:id/',  array( $controllers['curriculum'], 'editAction' ) );
+		$this->router->get( '/curriculums/show/:id/', array( $controllers['curriculum'], 'showAction' ) );
+		$this->router->get( '/curriculums/edit/:id/', array( $controllers['curriculum'], 'editAction' ) );
 		$this->router->post( '/curriculums/save/',    array( $controllers['curriculum'], 'saveAction' ) );
 		$this->router->post( '/curriculums/delete/',  array( $controllers['curriculum'], 'deleteAction' ) );
+
+		/* Schools routes */
+		$this->router->get( '/schools/',          array( $controllers['school'], 'indexAction' ) );
+		$this->router->get( '/schools/new/',      array( $controllers['school'], 'newAction' ) );
+		$this->router->get( '/schools/show/:id/', array( $controllers['school'], 'showAction' ) );
+		$this->router->get( '/schools/edit/:id/', array( $controllers['school'], 'editAction' ) );
+		$this->router->post( '/schools/save/',    array( $controllers['school'], 'saveAction' ) );
+		$this->router->post( '/schools/delete/',  array( $controllers['school'], 'deleteAction' ) );
+
+		/* School locations routes */
+		$this->router->get( '/schools/:school_id/locations/new/',      array( $controllers['school_location'], 'newAction' ) );
+		$this->router->get( '/schools/:school_id/locations/show/:id/', array( $controllers['school_location'], 'showAction' ) );
+		$this->router->get( '/schools/:school_id/locations/edit/:id/', array( $controllers['school_location'], 'editAction' ) );
+		$this->router->post( '/schools/:school_id/locations/save/',    array( $controllers['school_location'], 'saveAction' ) );
+
 
 		// Handle not found error from Slim on parse_request.
 		$this->router->notFound( function() {
