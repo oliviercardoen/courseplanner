@@ -36,6 +36,8 @@
 						<li><a href="<?php echo App::url( 'home' ); ?>">Accueil</a></li>
 						<li><a href="<?php echo App::url( 'courses' ); ?>">Mes Cours</a></li>
 						<li><a href="<?php echo App::url( 'curriculums' ); ?>">Mes Formations</a></li>
+						<li><a href="<?php echo App::url( 'schools' ); ?>">Mes Ecoles</a></li>
+						<li><a href="<?php echo App::url( 'students' ); ?>">Mes Etudiants</a></li>
 					</ul><!-- .nav -->
 					<ul class="nav navbar-nav pull-right hidden-xs">
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <?php echo App::user()->fullname(); ?> <b class="caret"></b></a>
