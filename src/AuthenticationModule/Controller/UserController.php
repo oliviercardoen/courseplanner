@@ -61,11 +61,7 @@ class UserController extends Controller {
 	 * Handle the index action.
 	 * Usually, controller will fetch entities and render a list.
 	 */
-	public function indexAction() {
-		$this->render( View::make( 'users/forms/register' , array(
-			'title'   => 'Nouvelle inscription pour Course Planner'
-		) ) );
-	}
+	public function indexAction() {}
 
 	/**
 	 * Handle the new action.
