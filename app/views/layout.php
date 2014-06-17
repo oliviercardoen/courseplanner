@@ -33,7 +33,6 @@
 			<?php if ( App::user()->isAuthenticated() ): ?>
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="<?php echo App::url( 'home' ); ?>">Accueil</a></li>
 						<li><a href="<?php echo App::url( 'courses' ); ?>">Mes Cours</a></li>
 						<li><a href="<?php echo App::url( 'curriculums' ); ?>">Mes Formations</a></li>
 						<li><a href="<?php echo App::url( 'schools' ); ?>">Mes &Eacute;coles</a></li>
@@ -42,7 +41,7 @@
 					<ul class="nav navbar-nav pull-right hidden-xs">
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <?php echo App::user()->fullname(); ?> <b class="caret"></b></a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="<?php  printf( '%1$s/%2$s', App::url( 'profile' ), App::user()->id ); ?>"><i class="glyphicon glyphicon-cog"></i> Mon profil</a></li>
+								<li><a href="<?php  printf( '%1$s/%2$s', App::url( 'profile' ), App::user()->id ); ?>"><i class="glyphicon glyphicon-cog mr-xxsmall"></i>Mon profil</a></li>
 								<li class="divider"></li>
 								<li><a href="<?php echo App::url( 'logout' ); ?>"><i class="glyphicon glyphicon-off"></i> Se d&eacute;connecter</a></li>
 							</ul>
