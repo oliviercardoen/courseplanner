@@ -5,6 +5,21 @@ use Octopix\Selene\Mvc\Model\Model;
 
 class SchoolLocation extends Model {
 
+	protected $address;
+
+	public function address()
+	{
+		if ( !isset( $this->address ) ) {
+			$sql = 'SELECT * FROM `address` WHERE `school_location_id` = :id ORDER BY `address`.`id`';
+			$query = self::prepare( $sql );
+			$query->bindValue(':id', (int) $this->id, \PDO::PARAM_INT);
+			$query->execute();
+			$query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\CoursePlanner\BaseModule\Model\Address');
+			return $query->fetch();
+		}
+		return $this->address;
+	}
+
 	public static function all( $table = '`school_location`' )
 	{
 		return parent::all( $table );

@@ -19,16 +19,24 @@
 		<div class="col-sm-2 font-bold text-right">Nom</div>
 		<div class="col-sm-10 mb-medium"><?php echo $entity->name; ?></div>
 	</div>
-	<?php if ( !empty( $courses ) ): ?>
+	<?php if ( !empty( $address ) ): ?>
 		<div class="row">
-			<div class="col-sm-2 font-bold text-right">Cours</div>
-			<div class="col-sm-10 mb-medium">
-				<ul class="list-unstyled">
-					<?php foreach( $courses as $course ): ?>
-						<li><a href="<?php echo \App\App::url( 'courses' ) . '/show/' . $course->id; ?>"><?php echo $course->name; ?></li>
-					<?php endforeach; ?>
-				</ul>
-			</div>
+			<div class="col-sm-2 font-bold text-right">Rue</div>
+			<div class="col-sm-10 mb-medium"><?php echo $address->street; ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 font-bold text-right">Ville</div>
+			<div class="col-sm-10 mb-medium"><?php echo $address->city; ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 font-bold text-right">Code postal</div>
+			<div class="col-sm-10 mb-medium"><?php echo $address->zipcode; ?></div>
+		</div>
+	<?php endif; ?>
+	<?php if ( !empty( $country ) ): ?>
+		<div class="row">
+			<div class="col-sm-2 font-bold text-right">Pays</div>
+			<div class="col-sm-10 mb-medium"><?php echo $country->name; ?></div>
 		</div>
 	<?php endif; ?>
 <?php endif; ?>

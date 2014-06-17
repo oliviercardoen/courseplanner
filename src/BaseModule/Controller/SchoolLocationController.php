@@ -1,6 +1,8 @@
 <?php
 namespace CoursePlanner\BaseModule\Controller;
 
+use CoursePlanner\BaseModule\Model\Address;
+use CoursePlanner\BaseModule\Model\Country;
 use CoursePlanner\BaseModule\Model\School;
 use CoursePlanner\BaseModule\Model\SchoolLocation;
 use Octopix\Selene\Mvc\Controller\Controller;
@@ -37,8 +39,10 @@ class SchoolLocationController extends Controller {
 	{
 		$location = SchoolLocation::find( $id );
 		$this->render( View::make( 'schools/locations/show', array(
-			'title'  => $location->name,
-			'entity' => $location
+			'title'   => $location->name,
+			'entity'  => $location,
+			'address' => $location->address(),
+			'country' => Country::find( $location->address()->country_id )
 		) ) );
 	}
 
@@ -51,8 +55,10 @@ class SchoolLocationController extends Controller {
 	{
 		$location = SchoolLocation::find( $id );
 		$this->render( View::make( 'schools/locations/form' , array(
-			'title'  => sprintf( 'Modifier "%s"', $location->name ),
-			'entity' => $location
+			'title'     => sprintf( 'Modifier "%s"', $location->name ),
+			'entity'    => $location,
+			'address'   => $location->address(),
+			'countries' => Country::all()
 		) ) );
 	}
 
@@ -72,14 +78,21 @@ class SchoolLocationController extends Controller {
 
 		if ( $saved ) {
 			$message = 'Votre implantation a correctement &eacute;t&eacute; enregistr&eacute;.';
-			$school = School::find( $location->school_id );
+			$address = new Address();
+			$address->street = Input::safe( $this->getRequest()->post('address_street') );
+			$address->city = Input::safe( $this->getRequest()->post('address_city') );
+			$address->zipcode = Input::safe( $this->getRequest()->post('address_zipcode') );
+			$address->country_id = (int) $this->getRequest()->post('address_country_id');
+			$address->school_location_id = $location->id;
+			$address->save();
 		}
-		$this->render( View::make( 'schools/show' , array(
-			'status'    => $saved,
-			'message'   => $message,
-			'title'     => $school->name,
-			'entity'    => $school,
-			'locations' => $school->locations()
+		$this->render( View::make( 'schools/locations/show', array(
+			'status'  => $saved,
+			'message' => $message,
+			'title'   => $location->name,
+			'entity'  => $location,
+			'address' => $location->address(),
+			'country' => Country::find( $location->address()->country_id )
 		) ) );
 	}
 
