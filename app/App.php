@@ -96,18 +96,11 @@ class App extends Application {
 		});
 
 		/* Registration and login routes */
-		$this->router->post( '/authenticate/',  array( $controllers['user'], 'authenticateAction' ) );
-
 		$this->router->get( '/register/',       array( $controllers['user'], 'indexAction' ) );
 		$this->router->post( '/register/save/', array( $controllers['user'], 'saveAction' ) );
-
+		$this->router->post( '/authenticate/',  array( $controllers['user'], 'authenticateAction' ) );
 		$this->router->get( '/logout/',         array( $controllers['user'], 'logoutAction' ) );
-
-		/* User profile routes */
-		$this->router->get( '/profile/:id/',       array( $controllers['user'], 'showAction' ) );
-		$this->router->get( '/profile/edit/:id/',  array( $controllers['user'], 'editAction' ) );
-		$this->router->post( '/profile/save/',     array( $controllers['user'], 'saveAction' ) );
-		$this->router->post( '/profile/delete/',   array( $controllers['user'], 'deleteAction' ) );
+		$this->router->get( '/profile/',        array( $controllers['user'], 'profileAction' ) );
 
 		/* Course routes */
 		$this->router->get( '/courses/',           array( $controllers['course'], 'indexAction' ) );

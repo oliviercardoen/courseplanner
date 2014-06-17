@@ -51,6 +51,14 @@ class UserController extends Controller {
 		) ) );
 	}
 
+	public function profileAction()
+	{
+		$this->render( View::make( 'users/show', array(
+			'title'  => App::user()->fullname(),
+			'entity' => App::user()
+		) ) );
+	}
+
 	/**
 	 * Handle the delete action.
 	 * Usually, controller will delete the entity.
