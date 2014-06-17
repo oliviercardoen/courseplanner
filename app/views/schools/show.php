@@ -4,12 +4,16 @@
 
 <?php if ( !empty( $entity ) ): ?>
 	<div class="row">
-		<div class="col-sm-8">
+		<div class="col-sm-6">
 			<h1 class="page-header"><?php echo $title; ?></h1>
 		</div>
-		<div class="col-sm-4">
-			<a class="pull-right btn btn-default ml-small" href="<?php printf( '%1$s/%2$s/locations/new/', \App\App::url( 'schools' ), $entity->id ); ?>"><i class="glyphicon glyphicon-plus mr-xxsmall"></i>Implantation</a>
-			<a class="pull-right btn btn-default" href="<?php echo \App\App::url( 'schools' ) . '/edit/' . $entity->id; ?>"><i class="glyphicon glyphicon-pencil mr-xxsmall"></i>Modifier</a>
+		<div class="col-sm-6">
+			<form class="inline-block pull-right ml-small" action="<?php echo \App\App::url( 'schools' ) . '/delete/'; ?>" method="POST">
+				<input type="hidden" name="id" value="<?php echo $entity->id; ?>" />
+				<button class="btn btn-danger" type="submit"><i class="glyphicon glyphicon-trash mr-xxsmall"></i><span class="hidden-xs">Supprimer</span></button>
+			</form>
+			<a class="pull-right btn btn-default ml-small" href="<?php echo \App\App::url( 'schools' ) . '/edit/' . $entity->id; ?>"><i class="glyphicon glyphicon-pencil mr-xxsmall"></i><span class="hidden-xs">Modifier</span></a>
+			<a class="pull-right btn btn-default" href="<?php printf( '%1$s/locations/new/?school_id=%2$s', \App\App::url( 'schools' ), $entity->id ); ?>"><i class="glyphicon glyphicon-plus mr-xxsmall"></i><span class="hidden-xs">Implantation</span></a>
 		</div>
 	</div>
 	<div class="row">

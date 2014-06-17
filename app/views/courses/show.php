@@ -4,10 +4,14 @@
 
 <?php if ( !empty( $course ) ): ?>
 	<div class="row">
-		<div class="col-sm-10">
+		<div class="col-sm-8">
 			<h1 class="page-header"><?php echo $title; ?></h1>
 		</div>
-		<div class="col-sm-2">
+		<div class="col-sm-4">
+			<form class="inline-block pull-right ml-small" action="<?php echo \App\App::url( 'courses' ) . '/delete/'; ?>" method="POST">
+				<input type="hidden" name="id" value="<?php echo $course->id; ?>" />
+				<button class="btn btn-danger" type="submit"><i class="glyphicon glyphicon-trash mr-xxsmall"></i><span class="hidden-xs">Supprimer</span></button>
+			</form>
 			<a class="pull-right btn btn-default" href="<?php echo \App\App::url( 'courses' ) . '/edit/' . $course->id; ?>"><i class="glyphicon glyphicon-pencil mr-xxsmall"></i>Modifier</a>
 		</div>
 	</div>
