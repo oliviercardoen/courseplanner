@@ -15,7 +15,6 @@ class CourseController extends Controller {
 	 */
 	public function deleteAction()
 	{
-		$deleted = false;
 		$message = 'Une erreur est survenue. Votre cours n\'a pas été supprimé.';
 
 		$course = Course::find( (int) $this->getRequest()->post('id') );
