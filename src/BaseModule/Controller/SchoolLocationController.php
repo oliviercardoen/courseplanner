@@ -1,7 +1,11 @@
 <?php
 namespace CoursePlanner\BaseModule\Controller;
 
+use CoursePlanner\BaseModule\Model\School;
+use CoursePlanner\BaseModule\Model\SchoolLocation;
 use Octopix\Selene\Mvc\Controller\Controller;
+use Octopix\Selene\Mvc\View\View;
+use Octopix\Selene\Form\Input\Input;
 
 class SchoolLocationController extends Controller {
 
@@ -9,10 +13,7 @@ class SchoolLocationController extends Controller {
 	 * Handle the index action.
 	 * Usually, controller will fetch entities and render a list.
 	 */
-	public function indexAction()
-	{
-		// TODO: Implement indexAction() method.
-	}
+	public function indexAction() {}
 
 	/**
 	 * Handle the new action.
@@ -21,7 +22,10 @@ class SchoolLocationController extends Controller {
 	 */
 	public function newAction()
 	{
-		// TODO: Implement newAction() method.
+		$this->render( View::make( 'schools/locations/form' , array(
+			'title'   => 'Ajouter une nouvelle implantation',
+			'school_id' => (int) $this->getRequest()->get( 'school_id' )
+		) ) );
 	}
 
 	/**
@@ -31,7 +35,11 @@ class SchoolLocationController extends Controller {
 	 */
 	public function showAction($id)
 	{
-		// TODO: Implement showAction() method.
+		$location = SchoolLocation::find( $id );
+		$this->render( View::make( 'schools/locations/show', array(
+			'title'  => $location->name,
+			'entity' => $location
+		) ) );
 	}
 
 	/**
@@ -41,7 +49,11 @@ class SchoolLocationController extends Controller {
 	 */
 	public function editAction($id)
 	{
-		// TODO: Implement editAction() method.
+		$location = SchoolLocation::find( $id );
+		$this->render( View::make( 'schools/locations/form' , array(
+			'title'  => sprintf( 'Modifier "%s"', $location->name ),
+			'entity' => $location
+		) ) );
 	}
 
 	/**
@@ -50,7 +62,25 @@ class SchoolLocationController extends Controller {
 	 */
 	public function saveAction()
 	{
-		// TODO: Implement saveAction() method.
+		$message = 'Une erreur est survenue. Votre implantation n\'a pas &eacute;t&eacute; enregistr&eacute;.';
+
+		$location = new SchoolLocation();
+		$location->id = (int) $this->getRequest()->post('id');
+		$location->school_id = (int) $this->getRequest()->post('school_id');
+		$location->name = Input::safe( $this->getRequest()->post('name') );
+		$saved = $location->save();
+
+		if ( $saved ) {
+			$message = 'Votre implantation a correctement &eacute;t&eacute; enregistr&eacute;.';
+			$school = School::find( $location->school_id );
+		}
+		$this->render( View::make( 'schools/show' , array(
+			'status'    => $saved,
+			'message'   => $message,
+			'title'     => $school->name,
+			'entity'    => $school,
+			'locations' => $school->locations()
+		) ) );
 	}
 
 	/**
@@ -59,7 +89,21 @@ class SchoolLocationController extends Controller {
 	 */
 	public function deleteAction()
 	{
-		// TODO: Implement deleteAction() method.
+		$message = 'Une erreur est survenue. Votre implantation n\'a pas été supprimé.';
+
+		$location = SchoolLocation::find( (int) $this->getRequest()->post('id') );
+		$school = School::find( $location->school_id );
+		$deleted = $location->delete();
+
+		if ( $deleted ) {
+			$message = 'Votre implantation a correctement &eacute;t&eacute; supprim&eacute;.';
+		}
+		$this->render( View::make( 'schools/show' , array(
+			'status'  => $deleted,
+			'message' => $message,
+			'title'   => $school->name,
+			'entity'  => $school
+		) ) );
 	}
 
 } 
