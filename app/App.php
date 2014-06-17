@@ -90,7 +90,7 @@ class App extends Application {
 			exit( View::make( 'layout' , array(
 				'content' => View::make( 'index', array(
 					'title'   => sprintf( 'Bienvenue, %s!', $user->firstname ),
-					'content' => '<p class="lead">Vous allez découvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
+					'content' => '<p class="lead">Vous allez d&eacute;couvrir Course Planner. Le premier logiciel web de gestion de votre agenda de cours.</p>'
 				) )
 			) ) );
 		});
@@ -133,17 +133,17 @@ class App extends Application {
 		$this->router->post( '/schools/save/',    array( $controllers['school'], 'saveAction' ) );
 		$this->router->post( '/schools/delete/',  array( $controllers['school'], 'deleteAction' ) );
 
-		/* School locations routes */
-		$this->router->get( '/schools/:school_id/locations/new/',      array( $controllers['school_location'], 'newAction' ) );
-		$this->router->get( '/schools/:school_id/locations/show/:id/', array( $controllers['school_location'], 'showAction' ) );
-		$this->router->get( '/schools/:school_id/locations/edit/:id/', array( $controllers['school_location'], 'editAction' ) );
-		$this->router->post( '/schools/:school_id/locations/save/',    array( $controllers['school_location'], 'saveAction' ) );
+		$this->router->get( '/schools/locations/new/',      array( $controllers['school_location'], 'newAction' ) );
+		$this->router->get( '/schools/locations/show/:id/', array( $controllers['school_location'], 'showAction' ) );
+		$this->router->get( '/schools/locations/edit/:id/', array( $controllers['school_location'], 'editAction' ) );
+		$this->router->post( '/schools/locations/save/',    array( $controllers['school_location'], 'saveAction' ) );
+		$this->router->post( '/schools/locations/delete/',  array( $controllers['school_location'], 'deleteAction' ) );
 
 
 		// Handle not found error from Slim on parse_request.
 		$this->router->notFound( function() {
 			exit( View::make( 'layout', array(
-				'title' => 'Oups! Désolé ;-)',
+				'title' => 'Oups! D&eacute;sol&eacute; ;-)',
 				'content' => View::make( '404', array(
 					'content' => 'Il semble que le contenu que vous cherchez ne soit pas/plus disponible.'
 				) )

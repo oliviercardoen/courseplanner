@@ -5,6 +5,7 @@ $config = array(
 		'courses'      => 'http://sites/php/courseplanner/courses',
 		'curriculums'  => 'http://sites/php/courseplanner/curriculums',
 		'schools'      => 'http://sites/php/courseplanner/schools',
+		'locations'    => 'http://sites/php/courseplanner/schools/locations',
 		'students'     => 'http://sites/php/courseplanner/students',
 		'register'     => 'http://sites/php/courseplanner/register',
 		'authenticate' => 'http://sites/php/courseplanner/authenticate',
