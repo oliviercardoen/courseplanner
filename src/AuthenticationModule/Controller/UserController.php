@@ -34,7 +34,7 @@ class UserController extends Controller {
 			'status'  => $authenticated,
 			'message' => 'Une erreur est survenue. Vos informations de connexion sont incorrectes.',
 			'content' => View::make( 'users/forms/login', array(
-				'title' => 'Veuillez vous connecter'
+				'title' => 'Connexion'
 			) )
 		) ) );
 	}
@@ -47,7 +47,7 @@ class UserController extends Controller {
 	{
 		App::user()->logout();
 		$this->render( View::make( 'users/forms/login', array(
-			'title' => 'Veuillez vous connecter'
+			'title' => 'Connexion'
 		) ) );
 	}
 
@@ -61,50 +61,33 @@ class UserController extends Controller {
 	 * Handle the index action.
 	 * Usually, controller will fetch entities and render a list.
 	 */
-	public function indexAction() {}
+	public function indexAction()
+	{
+		$this->render( View::make( 'users/forms/register' , array(
+			'title'   => 'Nouvelle inscription pour Course Planner'
+		) ) );
+	}
 
 	/**
 	 * Handle the new action.
 	 * Usually, the controller will display an empty form to create a new
 	 * instance of a model and store in the database.
 	 */
-	public function newAction()
-	{
-		$this->render( View::make( 'courses/form' , array(
-			'title'   => 'Ajouter un nouveau cours',
-			'curriculums' => Curriculum::all()
-		) ) );
-	}
+	public function newAction() {}
 
 	/**
 	 * Handle the show action.
 	 * Usually, controller will fetch one record and render the entity.
 	 * @param array $vars
 	 */
-	public function showAction($id)
-	{
-		$course = Course::find( $id );
-		$this->render( View::make( 'courses/show', array(
-			'title'  	  => $course->name,
-			'course' 	  => $course,
-			'curriculums' => $course->curriculums()
-		) ) );
-	}
+	public function showAction($id) {}
 
 	/**
 	 * Handle the edit action.
 	 * Usually, controller will fetch one record, render the entity
 	 * and the form to edit the rendered entity.
 	 */
-	public function editAction($id)
-	{
-		$course = Course::find( $id );
-		$this->render( View::make( 'courses/form' , array(
-			'title'  => sprintf( 'Modifier "%s"', $course->name ),
-			'course' => $course,
-			'curriculums' => Curriculum::all()
-		) ) );
-	}
+	public function editAction($id) {}
 
 	/**
 	 * Handle the save action.

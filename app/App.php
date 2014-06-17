@@ -83,7 +83,7 @@ class App extends Application {
 			if( !$user->isAuthenticated() ) {
 				exit( View::make( 'layout', array(
 					'content' => View::make( 'users/forms/login', array(
-							'title' => 'Veuillez vous connecter'
+							'title' => 'Connexion'
 						) )
 				) ) );
 			}
