@@ -11,7 +11,7 @@
 		<label for="reference_document" class="col-sm-2 control-label">Période</label>
 		<div class="col-sm-4">
 			<select class="form-control" id="timeslot_id" name="timeslot_id">
-				<option>Sélectionnez</option>
+				<option>S&eacute;lectionnez</option>
 				<?php if ( !empty( $timeslots ) ): ?>
 					<?php foreach( $timeslots as $timeslot ): ?>
 						<option value="<?php echo $timeslot->id; ?>"><?php echo $timeslot->name; ?></option>
