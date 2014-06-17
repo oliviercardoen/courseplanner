@@ -15,7 +15,7 @@ class SchoolController extends Controller {
 	public function indexAction()
 	{
 		$this->render( View::make( 'schools/index' , array(
-			'title'     => 'Mes Ecoles',
+			'title'     => 'Mes &Eacute;coles',
 			'entities'  => School::all()
 		) ) );
 	}
@@ -54,7 +54,11 @@ class SchoolController extends Controller {
 	 */
 	public function editAction($id)
 	{
-		// TODO: Implement editAction() method.
+		$school = School::find( $id );
+		$this->render( View::make( 'schools/form' , array(
+			'title'  => sprintf( 'Modifier "%s"', $school->name ),
+			'entity' => $school
+		) ) );
 	}
 
 	/**
@@ -87,7 +91,20 @@ class SchoolController extends Controller {
 	 */
 	public function deleteAction()
 	{
-		// TODO: Implement deleteAction() method.
+		$message = 'Une erreur est survenue. Votre &eacute;cole n\'a pas été supprimé.';
+
+		$school = School::find( (int) $this->getRequest()->post('id') );
+		$deleted = $school->delete();
+
+		if ( $deleted ) {
+			$message = 'Votre &eacute; a correctement été supprimé.';
+		}
+		$this->render( View::make( 'schools/index' , array(
+			'status'   => $deleted,
+			'message'  => $message,
+			'title'    => 'Mes &Eacute;coles',
+			'entities' => School::all()
+		) ) );
 	}
 
 } 

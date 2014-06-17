@@ -22,7 +22,7 @@
 					<ul class="list-unstyled">
 						<?php $locations = $entity->locations(); ?>
 						<?php foreach( $locations as $location ): ?>
-							<li><a href="<?php echo \App\App::url( 'locations' ) . '/show/' . $location->id; ?>"><?php echo $location->name; ?></a></li>
+							<li><a href="<?php printf( '%1$s/show/%2$s', \App\App::url( 'locations' ), $location->id ); ?>"><?php echo $location->name; ?></a></li>
 						<?php endforeach; ?>
 					</ul>
 				</td>

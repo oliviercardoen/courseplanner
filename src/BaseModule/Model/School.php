@@ -28,6 +28,11 @@ class School extends Model {
 		return parent::find( $id, $table );
 	}
 
+	public function delete( $table = '`school`' )
+	{
+		return parent::delete( $table );
+	}
+
 	public function save()
 	{
 		if ( $this->isNew() ) {
