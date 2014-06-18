@@ -24,8 +24,4 @@
 		<div class="col-sm-2 font-bold text-right">Mot de passe</div>
 		<div class="col-sm-10 mb-medium"><?php echo $entity->password; ?></div>
 	</div>
-	<div class="row">
-		<div class="col-sm-2 font-bold text-right">Date d'enregistrement</div>
-		<div class="col-sm-10 mb-medium"><?php echo $entity->registration_date; ?></div>
-	</div>
 <?php endif; ?>
