@@ -7,7 +7,7 @@ session_start();
 
 class User extends Model {
 
-	private $name;
+	private $email;
 	private $password;
 
 	public function __get( $key )
@@ -30,12 +30,11 @@ class User extends Model {
 	public function save()
 	{
 		if ( $this->isNew() && $this->hasUniqueName() ) {
-			$sql = 'INSERT INTO `user` ( `id`, `name`, `firstname`, `lastname`, `email`, `password`, `user_role_id`, `registration_date` ) VALUES ( :id, :name, :firstname, :lastname, :email, :password, 1, NOW() );';
+			$sql = 'INSERT INTO `user` ( `id`, `firstname`, `lastname`, `email`, `password` ) VALUES ( :id, :firstname, :lastname, :email, :password );';
 
 			$query = parent::prepare( $sql );
 
 			$query->bindValue(':id', $this->id );
-			$query->bindValue(':name', $this->name );
 			$query->bindValue(':firstname', $this->firstname );
 			$query->bindValue(':lastname', $this->lastname );
 			$query->bindValue(':email', $this->email );
@@ -49,8 +48,8 @@ class User extends Model {
 	public function hasUniqueName()
 	{
 		if ( isset( $this->name ) ) {
-			$query = self::prepare( 'SELECT * FROM `user` WHERE `name` = :name' );
-			$query->bindValue(':name', $this->name );
+			$query = self::prepare( 'SELECT * FROM `user` WHERE `email` = :email' );
+			$query->bindValue(':email', $this->email );
 			$query->execute();
 			$query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_called_class());
 			$user = $query->fetch();
@@ -64,9 +63,9 @@ class User extends Model {
 
 	public function exist()
 	{
-		if ( isset( $this->name ) && isset( $this->password ) ) {
-			$query = self::prepare( 'SELECT * FROM `user` WHERE `name` = :name AND `password` = :password' );
-			$query->bindValue(':name', $this->name );
+		if ( isset( $this->email ) && isset( $this->password ) ) {
+			$query = self::prepare( 'SELECT * FROM `user` WHERE `email` = :email AND `password` = :password' );
+			$query->bindValue(':email', $this->email );
 			$query->bindValue(':password', $this->password );
 			$query->execute();
 			$query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, get_called_class());

@@ -18,7 +18,7 @@ class UserController extends Controller {
 	public function authenticateAction()
 	{
 		$user = new User();
-		$user->name = Input::safe( $this->getRequest()->post('user_email') );
+		$user->email = Input::safe( $this->getRequest()->post('user_email') );
 		$user->password = sha1( App::salt() . Input::safe( $this->getRequest()->post('user_password') ) );
 		$authenticated = $user->authenticate();
 
@@ -106,8 +106,6 @@ class UserController extends Controller {
 		$message = 'Votre inscription n\'a pas &eacute;t&eacute; enregistr&eacute; car %s.';
 
 		$user = new User();
-		//$user->id = (int) $this->getRequest()->post('id');
-		$user->name = Input::safe( $this->getRequest()->post('email') );
 		$user->firstname = Input::safe( $this->getRequest()->post('firstname') );
 		$user->lastname = Input::safe( $this->getRequest()->post('lastname') );
 		$user->email = Input::safe( $this->getRequest()->post('email') );
