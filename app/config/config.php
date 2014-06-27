@@ -1,4 +1,10 @@
 <?php
+/*
+ * 	array( 'routes' => array(
+		'/authenticate' => 'UserController::authenticateAction'
+	) );
+
+ */
 $config = array(
 	'menu' => array(
 		'home'         => 'http://sites/php/courseplanner',
